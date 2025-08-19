@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ishika AI Chatbot</title>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Montserrat', Arial, sans-serif;
+      background: #fefefe;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #232323;
+    }
+    #chatbotContainer {
+      width: 360px;
+      max-width: 95vw;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: 'Montserrat', Arial, sans-serif;
+      position: relative;
+    }
+    .chatbot-header {
+      background: #589d41;
+      color: #fff;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 1.15rem;
+      position: relative;
+    }
+    .chatbot-header img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2.5px solid #e9fbe0;
+      background: #fff;
+      object-fit: cover;
+      box-shadow: 0 3px 10px #bde5b670;
+    }
+    .chatbot-close {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 800;
+      line-height: 1;
+      opacity: 0.9;
+    }
+    .chatbot-body {
+      padding: 18px 20px 10px 20px;
+      height: 320px;
+      max-height: 70vh;
+      overflow-y: auto;
+      background: #eef4de;
+      color: #375534;
+      font-size: 1rem;
+      line-height: 1.5;
+      scroll-behavior: smooth;
+    }
+    .chatbot-message {
+      margin-bottom: 14px;
+      display: flex;
+      max-width: 100%;
+    }
+    .chatbot-message.bot {
+      justify-content: flex-start;
+    }
+    .chatbot-message.user {
+      justify-content: flex-end;
+    }
+    .chatbot-bubble {
+      padding: 12px 18px;
+      border-radius: 18px;
+      max-width: 75%;
+      box-shadow: 0 3px 14px rgba(0,0,0,0.10);
+      font-weight: 500;
+      user-select: none;
+      white-space: pre-line;
+    }
+    .chatbot-bubble.bot {
+      background: #cee7b1;
+      color: #313f1a;
+      border-radius: 18px 18px 18px 2px;
+    }
+    .chatbot-bubble.user {
+      background: #589d41;
+      color: #fff;
+      font-weight: 600;
+      border-radius: 18px 18px 2px 18px;
+    }
+    .chatbot-footer {
+      background: #d6e4be;
+      padding: 15px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .chatbot-option {
+      padding: 8px 20px;
+      border-radius: 20px;
+      border: none;
+      background-color: #589d41;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: background-color 0.25s;
+      user-select: none;
+    }
+    .chatbot-option:hover {
+      background-color: #41722d;
+    }
+    #languageContainer, #themeContainer {
+      padding: 15px 20px;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      background: #d6e4be;
+    }
+    .cv-button {
+      background: #589d41;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 24px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      user-select: none;
+    }
+    .cv-button:hover {
+      background: #41722d;
+    }
+    #downloadResumeBtn {
+      margin-left: auto;
+      background: #406030;
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      border-radius: 15px;
+      color: #ddefbd;
+      border: 1px solid #7fb968;
+      text-decoration: none;
+      cursor: pointer;
+      user-select: none;
+    }
+    #downloadResumeBtn:hover {
+      background: #2c3d16;
+      color: #cde4a0;
+    }
+    @media (max-width: 600px) {
+      #chatbotContainer {
+        right: 3vw;
+        width: 95vw;
+        bottom: 65px;
+      }
+    }
+    /* Dark mode styles */
+    #chatbotContainer.dark {
+      background: #232727;
+      color: #eaeaea;
+    }
+    #chatbotContainer.dark .chatbot-bubble.bot {
+      background: #314432;
+      color: #e1e9de;
+    }
+    #chatbotContainer.dark .chatbot-footer {
+      background: #2f4221;
+    }
+    #chatbotContainer.dark .chatbot-option:hover {
+      background: #76a358;
+    }
+  </style>
+</head>
+<body>
+
+<div id="chatbotContainer" role="dialog" aria-modal="true" aria-labelledby="chatbotTitle">
+  <div class="chatbot-header">
+    <img src="https://ui-avatars.com/api/?name=Ishika&background=589d41&color=fff&size=56" alt="Ishika Avatar" />
+    <span id="chatbotTitle">Ishika</span>
+    <a id="downloadResumeBtn" href="Ishika-Gupta-FinTech-Graduate.pdf" download title="Download Resume">📄 Download Resume</a>
+    <button class="chatbot-close" aria-label="Close chatbot">&times;</button>
+  </div>
+  <div class="chatbot-body" id="chatbotBody"></div>
+  <div class="chatbot-footer" id="chatbotFooter"></div>
+</div>
+
+<script>
+const RESUME = {
+  about: `Hi there, how’s your day going? (And yes, I hope you had your coffee! ☕)
+I’m Ishika — a data analyst who’s all about making data do something real. I don’t just crunch numbers: I turn them into connections, fresh perspectives, and results you can feel.
+
+Whether it’s building AI-driven assistants, crafting dashboards that spark action, exploring how FinTech can power sustainability, or diving deep into sentiment analysis with NLP, I bring both curiosity and creativity to every table. I believe data isn’t meant to sleep in spreadsheets—it’s here to inspire, empower, and change the game.
+
+My passion sits at the crossroads of FinTech, sustainability, and innovation. From blockchain analytics to ESG impact studies, I’m eager to shape smarter industries and a brighter future.
+
+I thrive on collaboration—meeting new people, forging strong connections, and making communication a superpower. If you value open minds and fresh ideas, let’s create something unforgettable together.
+
+When I’m not analyzing data, you’ll catch me #MandalaArt-ing (it’s my favorite way to find balance and spark creativity).
+
+If you’re looking for someone who can make your company’s vision vibrant, visible, and authentic, consider me your next brand ambassador. Let’s turn insights into impact—with energy and empathy!`,
+  education: `My analytical skillset is honed by a master’s degree in Financial Technology from the University of Liverpool, a prestigious Russell Group university renowned for driving innovation in the fintech space. This advanced training builds on my foundation in computer applications, where I graduated with distinction. Together, these experiences empower me to bridge technology and finance with creativity, precision, and industry-recognized expertise.`,
+  experience: `I rocked internships with Deloitte Australia and Accenture UK, and built forecasting and dashboards at Gulliver’s World. Every project a step toward mastery and fun!`,
+  skills: `Technical Expertise: Advanced proficiency in Python (including Pandas, NumPy, Matplotlib) for data analysis and automation; skilled in SQL and Excel for clean data management and complex analytics.
+
+Statistical Analysis: Strong foundation in statistics and data modeling to extract actionable insights from diverse datasets.
+
+Dashboard Building: Experienced in designing impactful, user-centric dashboards using Tableau and Power BI, translating data into compelling visual stories that guide decision-making.
+
+Data Storytelling & Reporting: Adept at crafting business reports, tracking KPIs, and presenting insights that connect with stakeholders across disciplines.`,
+  projects: `Built voice-activated assistants, sentiment-analysis chatbots, and environmental FinTech models. Data is my playground and passion!`,
+  value: `Curiosity drives me; clarity defines me; creativity delights me. I make data approachable and teamwork joyful — with positive vibes all around.`,
+  goals: `Dream big: lead FinTech analytics that empower people globally. And yes, one day, a TEDx talk with coffee on hand!`
+};
+
+const LANGUAGES = {
+  EN: {
+    welcome: "Hi, I am Ishika, this is my AI version, nice to have you here!",
+    chooseLang: "Which language would you like to chat in?",
+    langOpt: ["English", "हिंदी"],
+    chooseTheme: "And which theme do you prefer?",
+    themeOpt: ["Light Mode", "Dark Mode"],
+    greet2: "What would you like to know about me?",
+    options: [
+      { label: "About", key: "about" },
+      { label: "Education", key: "education" },
+      { label: "Work Experience", key: "experience" },
+      { label: "Skill Set", key: "skills" },
+      { label: "Projects", key: "projects" },
+      { label: "What I Bring to the Table", key: "value" },
+      { label: "My Long Term Goal", key: "goals" }
+    ]
+  },
+  HI: {
+    welcome: "नमस्ते, मैं ईशिका हूँ — आपकी AI दोस्त! मिलके अच्छा लगा ",
+    chooseLang: "कृपया भाषा चुनें:",
+    langOpt: ["English", "हिंदी"],
+    chooseTheme: "आप कौन सा थीम पसंद करेंगे?",
+    themeOpt: ["लाइट मोड", "डार्क मोड"],
+    greet2: "मुझसे क्या जानना चाहेंगे?",
+    options: [
+      { label: "मेरे बारे में", key: "about" },
+      { label: "एजुकेशन", key: "education" },
+      { label: "वर्क एक्सपीरियंस", key: "experience" },
+      { label: "स्किल सेट", key: "skills" },
+      { label: "प्रोजेक्ट्स", key: "projects" },
+      { label: "मैं क्या नया ला सकती हूँ", key: "value" },
+      { label: "मेरा लॉन्ग टर्म गोल", key: "goals" }
+    ]
+  }
+};
+
+let currentLang = 'EN';
+let currentTheme = 'light';
+
+const chatbot = document.getElementById('chatbotContainer');
+const chatBody = document.getElementById('chatbotBody');
+const chatFooter = document.getElementById('chatbotFooter');
+const closeBtn = chatbot.querySelector('.chatbot-close');
+
+function getFemaleVoice() {
+  const voices = window.speechSynthesis.getVoices();
+  // Try to find a female voice by name or language preference
+  return voices.find(
+    voice =>
+      voice.name.toLowerCase().includes('female') ||
+      voice.name.toLowerCase().includes('woman') ||
+      (voice.lang.startsWith('en') && voice.name.toLowerCase().includes('female'))
+  ) || voices.find(voice => voice.lang.startsWith('en')) || voices[0];
+}
+
+function appendMessage(text, fromUser = false) {
+  const messageDiv = document.createElement('div');
+  messageDiv.classList.add('chatbot-message', fromUser ? 'user' : 'bot');
+  const bubble = document.createElement('span');
+  bubble.className = 'chatbot-bubble ' + (fromUser ? 'user' : 'bot');
+  bubble.textContent = text;
+  messageDiv.appendChild(bubble);
+  chatBody.appendChild(messageDiv);
+  chatBody.scrollTop = chatBody.scrollHeight;
+  // Speech synthesis (talking) is optional, you can keep or remove the following
+  if (!fromUser) {
+    if ('speechSynthesis' in window) {
+  const utterance = new SpeechSynthesisUtterance(text);
+  const femaleVoice = getFemaleVoice();
+  if (femaleVoice) {
+    utterance.voice = femaleVoice;
+  }
+  utterance.pitch = 1;
+  utterance.rate = 1;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utterance);
+}
+
+  }
+}
+
+function clearOptions() {
+  chatFooter.innerHTML = '';
+}
+
+function showOptions(options) {
+  clearOptions();
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'chatbot-option';
+    btn.textContent = opt.label;
+    btn.onclick = () => {
+      appendMessage(opt.label, true);
+      clearOptions();
+      setTimeout(() => {
+        appendMessage(RESUME[opt.key]);
+        setTimeout(() => {
+          showOptions(LANGUAGES[currentLang].options);
+        }, 1200);
+      }, 700);
+    };
+    chatFooter.appendChild(btn);
+  });
+}
+
+function startChat() {
+  chatBody.innerHTML = '';
+  clearOptions();
+  appendMessage(LANGUAGES[currentLang].welcome);
+  setTimeout(() => {
+    appendMessage(LANGUAGES[currentLang].chooseLang);
+    clearOptions();
+    LANGUAGES['EN'].langOpt.forEach((langOption, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'chatbot-option';
+      btn.textContent = langOption;
+      btn.onclick = () => {
+        currentLang = idx === 0 ? 'EN' : 'HI';
+        appendMessage(langOption, true);
+        clearOptions();
+        setTimeout(() => {
+          appendMessage(LANGUAGES[currentLang].chooseTheme);
+          LANGUAGES[currentLang].themeOpt.forEach((themeOption, tIdx) => {
+            const themeBtn = document.createElement('button');
+            themeBtn.className = 'chatbot-option';
+            themeBtn.textContent = themeOption;
+            themeBtn.onclick = () => {
+              currentTheme = tIdx === 0 ? 'light' : 'dark';
+              chatbot.classList.toggle('dark', currentTheme === 'dark');
+              appendMessage(themeOption, true);
+              clearOptions();
+              setTimeout(() => {
+                appendMessage(LANGUAGES[currentLang].greet2);
+                showOptions(LANGUAGES[currentLang].options);
+              }, 700);
+            };
+            chatFooter.appendChild(themeBtn);
+          });
+        }, 700);
+      };
+      chatFooter.appendChild(btn);
+    });
+  }, 1500);
+}
+
+closeBtn.onclick = () => {
+  chatbot.style.display = 'none';
+  chatBody.innerHTML = '';
+  clearOptions();
+};
+
+window.onload = () => {
+  chatbot.style.display = 'flex';
+  startChat();
+};
+</script>
+
+</body>
+</html>
